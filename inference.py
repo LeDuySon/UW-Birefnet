@@ -83,7 +83,7 @@ if __name__ == '__main__':
     # Parameter from command line
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--ckpt', type=str, help='model folder')
-    parser.add_argument('--ckpt_folder', default=sorted(glob(os.path.join('ckpt', '*')))[-1], type=str, help='model folder')
+    parser.add_argument('--ckpt_folder', default=None, type=str, help='model folder')
     parser.add_argument('--pred_root', default='e_preds', type=str, help='Output folder')
     parser.add_argument('--testsets',
                         default={
@@ -95,6 +95,7 @@ if __name__ == '__main__':
                             'DIS5K-': 'DIS-VD',
                             'COD-': 'TE-COD10K',
                             'SOD-': 'DAVIS-S+TE-HRSOD+TE-UHRSD',
+                            'car-segmentation': 'test_01042024_v1'
                         }[config.task + ''],
                         type=str,
                         help="Test all sets: , 'DIS-VD+DIS-TE1+DIS-TE2+DIS-TE3+DIS-TE4'")

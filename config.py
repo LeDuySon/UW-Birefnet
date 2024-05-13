@@ -8,13 +8,14 @@ class Config():
         self.sys_home_dir = os.environ['HOME']     # Make up your file system as: SYS_HOME_DIR/codes/dis/BiRefNet, SYS_HOME_DIR/datasets/dis/xx, SYS_HOME_DIR/weights/xx
 
         # TASK settings
-        self.task = ['DIS5K', 'COD', 'HRSOD', 'DIS5K+HRSOD+HRS10K', 'P3M-10k'][0]
+        self.task = ['DIS5K', 'COD', 'HRSOD', 'DIS5K+HRSOD+HRS10K', 'P3M-10k', 'car-segmentation'][-1]
         self.training_set = {
             'DIS5K': ['DIS-TR', 'DIS-TR+DIS-TE1+DIS-TE2+DIS-TE3+DIS-TE4'][0],
             'COD': 'TR-COD10K+TR-CAMO',
             'HRSOD': ['TR-DUTS', 'TR-HRSOD', 'TR-UHRSD', 'TR-DUTS+TR-HRSOD', 'TR-DUTS+TR-UHRSD', 'TR-HRSOD+TR-UHRSD', 'TR-DUTS+TR-HRSOD+TR-UHRSD'][5],
             'DIS5K+HRSOD+HRS10K': 'DIS-TE1+DIS-TE2+DIS-TE3+DIS-TE4+DIS-TR+TE-HRS10K+TE-HRSOD+TE-UHRSD+TR-HRS10K+TR-HRSOD+TR-UHRSD',     # leave DIS-VD for evaluation.
             'P3M-10k': 'TR-P3M-10k',
+            'car-segmentation': 'train_01042024_v1'
         }[self.task]
 
         # Faster-Training settings
@@ -43,6 +44,7 @@ class Config():
                 'HRSOD': -20,
                 'DIS5K+HRSOD+HRS10K': -20,
                 'P3M-10k': -20,
+                'car-segmentation': -20,
             }[self.task]
         ][1]    # choose 0 to skip
         self.lr = (1e-4 if 'DIS5K' in self.task else 1e-5) * math.sqrt(self.batch_size / 4)     # DIS needs high lr to converge faster. Adapt the lr linearly
@@ -77,7 +79,7 @@ class Config():
         self.scale = self.progressive_ref and 2
         self.auxiliary_classification = False       # Only for DIS5K, where class labels are saved in `dataset.py`.
         self.refine_iteration = 1
-        self.freeze_bb = False
+        self.freeze_bb = True
         self.model = [
             'BiRefNet',
         ][0]
@@ -111,8 +113,8 @@ class Config():
         self.lambda_adv_d = 3. * (self.lambda_adv_g > 0)
 
         # PATH settings - inactive
-        self.data_root_dir = os.path.join(self.sys_home_dir, 'datasets/dis')
-        self.weights_root_dir = os.path.join(self.sys_home_dir, 'weights')
+        self.data_root_dir = os.path.join(self.sys_home_dir, 'codes/dis/data')
+        self.weights_root_dir = os.path.join(self.sys_home_dir, 'codes/dis/BiRefNet/checkpoints/backbone')
         self.weights = {
             'pvt_v2_b2': os.path.join(self.weights_root_dir, 'pvt_v2_b2.pth'),
             'pvt_v2_b5': os.path.join(self.weights_root_dir, ['pvt_v2_b5.pth', 'pvt_v2_b5_22k.pth'][0]),

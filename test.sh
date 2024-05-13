@@ -1,9 +1,12 @@
 devices=${1:-0}
 pred_root=${2:-e_preds}
+test_dataset_name=$3
+checkpoint_folder=${4:-checkpoints}
+save_output_dir="output/${test_dataset_name}"
 
 # Inference
 
-CUDA_VISIBLE_DEVICES=${devices} python inference.py --pred_root ${pred_root}
+CUDA_VISIBLE_DEVICES=${devices} python inference.py --pred_root ${pred_root} --testsets ${test_dataset_name} --ckpt_folder ${checkpoint_folder}
 
 echo Inference finished at $(date)
 
@@ -17,11 +20,12 @@ case "${task}" in
     "HRSOD") testsets='DAVIS-S,TE-HRSOD,TE-UHRSD,DUT-OMRON,TE-DUTS' ;;
     "DIS5K+HRSOD+HRS10K") testsets='DIS-VD' ;;
     "P3M-10k") testsets='TE-P3M-500-P,TE-P3M-500-NP' ;;
+    "car-segmentation") testsets='test_01042024_v1' ;;
 esac
 testsets=(`echo ${testsets} | tr ',' ' '`) && testsets=${testsets[@]}
 
 for testset in ${testsets}; do
-    nohup python eval_existingOnes.py --pred_root ${pred_root} --data_lst ${testset} > ${log_dir}/eval_${testset}.out 2>&1 &
+    nohup python eval_existingOnes.py --pred_root ${pred_root} --data_lst ${testset} --save_dir ${save_output_dir} > ${log_dir}/eval_${testset}.out 2>&1 &
 done
 
 

@@ -108,6 +108,7 @@ if __name__ == '__main__':
             'HRSOD': '+'.join(['DAVIS-S', 'TE-HRSOD', 'TE-UHRSD', 'TE-DUTS', 'DUT-OMRON'][:]),
             'DIS5K+HRSOD+HRS10K': '+'.join(['DIS-VD'][:]),
             'P3M-10k': '+'.join(['TE-P3M-500-P', 'TE-P3M-500-NP'][:]),
+            'car-segmentation': 'test_01042024_v1'
         }[config.task])
     parser.add_argument(
         '--save_dir', type=str, help='candidate competitors',

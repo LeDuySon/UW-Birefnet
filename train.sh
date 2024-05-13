@@ -9,6 +9,7 @@ case "${task}" in
     "HRSOD") epochs=150 && val_last=50 && step=5 ;;
     "DIS5K+HRSOD+HRS10K") epochs=300 && val_last=50 && step=5 ;;
     "P3M-10k") epochs=150 && val_last=50 && step=5 ;;
+    "car-segmentation") epochs=50 && val_last=10 && step=2 ;;
 esac
 testsets=NO     # Non-existing folder to skip.
 # testsets=TE-COD10K   # for COD
@@ -16,6 +17,9 @@ testsets=NO     # Non-existing folder to skip.
 # Train
 devices=$2
 nproc_per_node=$(echo ${devices%%,} | grep -o "," | wc -l)
+
+# resume
+resume=$3
 
 to_be_distributed=`echo ${nproc_per_node} | awk '{if($e > 0) print "True"; else print "False";}'`
 
@@ -35,7 +39,7 @@ else
     python train.py --ckpt_dir ckpt/${method} --epochs ${epochs} \
         --testsets ${testsets} \
         --dist ${to_be_distributed} \
-        --resume ckpt/xx/ep100.pth
+        --resume ${resume}
 fi
 
 echo Training finished at $(date)
