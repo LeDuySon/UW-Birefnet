@@ -22,6 +22,7 @@ class Config():
         self.load_all = True
         self.compile = True
         self.precisionHigh = True
+        self.use_fp16 = False
 
         # MODEL settings
         self.ms_supervision = True
@@ -54,10 +55,10 @@ class Config():
         # Backbone settings
         self.bb = [
             'vgg16', 'vgg16bn', 'resnet50',         # 0, 1, 2
-            'pvt_v2_b2', 'pvt_v2_b5',               # 3-bs10, 4-bs5
+            'swin_v1_t', 'swin_v1_s',               # 3, 4
             'swin_v1_b', 'swin_v1_l',               # 5-bs9, 6-bs4
-            'swin_v1_t', 'swin_v1_s',               # 7, 8
-            'pvt_v2_b0', 'pvt_v2_b1',               # 9, 10
+            'pvt_v2_b0', 'pvt_v2_b1',               # 7, 8
+            'pvt_v2_b2', 'pvt_v2_b5',               # 9-bs10, 10-bs5
         ][6]
         self.lateral_channels_in_collection = {
             'vgg16': [512, 256, 128, 64], 'vgg16bn': [512, 256, 128, 64], 'resnet50': [1024, 512, 256, 64],
@@ -103,7 +104,7 @@ class Config():
             'reg': 100 * 0,
             'ssim': 10 * 1,          # help contours,
             'cnt': 5 * 0,          # help contours
-            'structure': 5 * 0,    # structure loss
+            'structure': 5 * 0,    # structure loss from codes of MVANet. A little improvement on DIS-TE[1,2,3], a bit more decrease on DIS-TE4.
         }
         self.lambdas_cls = {
             'ce': 5.0
