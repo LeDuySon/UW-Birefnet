@@ -6,9 +6,9 @@ save_output_dir="output/${test_dataset_name}"
 
 # Inference
 
-CUDA_VISIBLE_DEVICES=${devices} python inference.py --pred_root ${pred_root} --testsets ${test_dataset_name} --ckpt_folder ${checkpoint_folder}
+# CUDA_VISIBLE_DEVICES=${devices} python inference.py --pred_root ${pred_root} --ckpt_folder ${checkpoint_folder}
 
-echo Inference finished at $(date)
+# echo Inference finished at $(date)
 
 # Evaluation
 log_dir=e_logs && mkdir ${log_dir}
@@ -22,7 +22,9 @@ case "${task}" in
     "P3M-10k") testsets='TE-P3M-500-P,TE-P3M-500-NP' ;;
     "car-segmentation") testsets='test_01042024_v1' ;;
 esac
+
 testsets=(`echo ${testsets} | tr ',' ' '`) && testsets=${testsets[@]}
+echo "Testsets: ${testsets}"
 
 for testset in ${testsets}; do
     nohup python eval_existingOnes.py --pred_root ${pred_root} --data_lst ${testset} --save_dir ${save_output_dir} > ${log_dir}/eval_${testset}.out 2>&1 &
