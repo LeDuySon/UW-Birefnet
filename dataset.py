@@ -55,13 +55,13 @@ class MyData(data.Dataset):
         # datasets can be a list of different datasets for training on combined sets.
         self.image_paths = []
         for dataset in datasets.split('+'):
-            image_root = os.path.join(dataset_root, dataset, 'im')
+            image_root = os.path.join(dataset_root, dataset, 'images')
             self.image_paths += [os.path.join(image_root, p) for p in os.listdir(image_root)]
         self.label_paths = []
         for p in self.image_paths:
             for ext in ['.png', '.jpg', '.PNG', '.JPG', '.JPEG']:
                 ## 'im' and 'gt' may need modifying
-                p_gt = p.replace('/im/', '/gt/')[:-(len(p.split('.')[-1])+1)] + ext
+                p_gt = p.replace('/images/', '/masks/')[:-(len(p.split('.')[-1])+1)] + ext
                 file_exists = False
                 if os.path.exists(p_gt):
                     self.label_paths.append(p_gt)
