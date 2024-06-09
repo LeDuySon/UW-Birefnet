@@ -22,7 +22,7 @@ def do_eval(opt):
             print('Skip dataset {}.'.format(_data_name))
             continue
         gt_src = os.path.join(opt.gt_root, _data_name)
-        gt_paths = sorted(glob(os.path.join(gt_src, 'gt', '*')))
+        gt_paths = sorted(glob(os.path.join(gt_src, 'masks', '*')))
         print('#' * 20, _data_name, '#' * 20)
         filename = os.path.join(opt.save_dir, '{}_eval.txt'.format(_data_name))
         tb = pt.PrettyTable()
@@ -41,7 +41,7 @@ def do_eval(opt):
             tb.field_names = ["Dataset", "Method", "Smeasure", 'MAE', "maxEm", "meanEm", "maxFm", "meanFm", "wFmeasure", "adpEm", "adpFm", "HCE"]
         for _model_name in opt.model_lst[:]:
             print('\t', 'Evaluating model: {}...'.format(_model_name))
-            pred_paths = [p.replace(opt.gt_root, os.path.join(opt.pred_root, _model_name)).replace('/gt/', '/') for p in gt_paths]
+            pred_paths = [p.replace(opt.gt_root, os.path.join(opt.pred_root, _model_name)).replace('/masks/', '/') for p in gt_paths]
             # print(pred_paths[:1], gt_paths[:1])
             em, sm, fm, mae, wfm, hce = evaluator(
                 gt_paths=gt_paths,
@@ -130,6 +130,7 @@ if __name__ == '__main__':
             for _model_name in opt.model_lst:
                 gt_pth = os.path.join(opt.gt_root, _data_name)
                 pred_pth = os.path.join(opt.pred_root, _model_name, _data_name)
+                
                 if not sorted(os.listdir(gt_pth)) == sorted(os.listdir(pred_pth)):
                     print(len(sorted(os.listdir(gt_pth))), len(sorted(os.listdir(pred_pth))))
                     print('The {} Dataset of {} Model is not matching to the ground-truth'.format(_data_name, _model_name))
