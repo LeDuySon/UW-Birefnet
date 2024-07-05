@@ -21,7 +21,9 @@ def do_eval(args):
         gt_src = os.path.join(args.gt_root, _data_name)
         gt_paths = sorted(glob(os.path.join(gt_src, 'gt', '*')))
         print('#' * 20, _data_name, '#' * 20)
+    
         filename = os.path.join(args.save_dir, '{}_eval.txt'.format(_data_name))
+        
         tb = pt.PrettyTable()
         tb.vertical_char = '&'
         if config.task == 'DIS5K':

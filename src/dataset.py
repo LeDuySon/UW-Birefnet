@@ -44,15 +44,18 @@ class MyData(data.Dataset):
         self.device = config.device
         if self.is_train and config.auxiliary_classification:
             self.cls_name2id = {_name: _id for _id, _name in enumerate(class_labels_TR_sorted)}
+            
         self.transform_image = transforms.Compose([
             transforms.Resize(self.data_size),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
         ][self.load_all or self.keep_size:])
+        
         self.transform_label = transforms.Compose([
             transforms.Resize(self.data_size),
             transforms.ToTensor(),
         ][self.load_all or self.keep_size:])
+        
         dataset_root = os.path.join(config.data_root_dir, config.task)
         # datasets can be a list of different datasets for training on combined sets.
         self.image_paths = []
@@ -60,6 +63,7 @@ class MyData(data.Dataset):
             image_root = os.path.join(dataset_root, dataset, 'im')
             self.image_paths += [os.path.join(image_root, p) for p in os.listdir(image_root)]
         self.label_paths = []
+        
         for p in self.image_paths:
             for ext in ['.png', '.jpg', '.PNG', '.JPG', '.JPEG']:
                 ## 'im' and 'gt' may need modifying
@@ -71,6 +75,7 @@ class MyData(data.Dataset):
                     break
             if not file_exists:
                 print('Not exists:', p_gt)
+                
         if self.load_all:
             self.images_loaded, self.labels_loaded = [], []
             self.class_labels_loaded = []
