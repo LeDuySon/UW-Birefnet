@@ -9,3 +9,5 @@ prettytable
 scipy
 scikit-image
 kornia
+numpy==1.23 # fix error
+setuptools==69.5.1 # fix error
