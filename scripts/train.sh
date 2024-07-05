@@ -1,7 +1,7 @@
 #!/bin/bash
 # Run script
 # Settings of training & test for different tasks.
-method="$1" # experiment name
+experiment_name="$1" # experiment name
 task=$(python3 src/config.py)
 case "${task}" in
     "DIS5K") epochs=600 && val_last=100 && step=5 ;;
@@ -29,17 +29,17 @@ then
     echo "Multi-GPU mode received..."
     CUDA_VISIBLE_DEVICES=${devices} \
     torchrun --nproc_per_node $((nproc_per_node+1)) --master_port=${3:-8989} \
-    src/train.py --ckpt_dir ckpt/${method} --epochs ${epochs} \
+    src/train.py --ckpt_dir ckpt/${experiment_name} --epochs ${epochs} \
         --testsets ${testsets} \
         --dist ${to_be_distributed}
 else
     echo "Single-GPU mode received..."
     CUDA_VISIBLE_DEVICES=${devices} \
-    python src/train.py --ckpt_dir ckpt/${method} \
+    python src/train.py --ckpt_dir ckpt/${experiment_name} \
                         --epochs ${epochs} \
                         --trainset ${trainset} \
                         --testsets ${testsets} \
-                        --dist ${to_be_distributed} 
+                        --dist ${to_be_distributed}
 fi
 
 echo Training finished at $(date)
