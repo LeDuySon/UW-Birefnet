@@ -2,6 +2,8 @@
 # Run script
 # Settings of training & test for different tasks.
 experiment_name="$1" # experiment name
+pretrained_checkpoint=${2:-""} # pretrained checkpoint
+
 task=$(python3 src/config.py)
 case "${task}" in
     "DIS5K") epochs=600 && val_last=100 && step=5 ;;
@@ -12,8 +14,8 @@ case "${task}" in
     "car-segmentation") epochs=150 && val_last=50 && step=5 ;;
 esac
 
-trainset=$2
-testsets=$3     # Non-existing folder to skip.
+trainset=$3
+testsets=$4     # Non-existing folder to skip.
 
 
 # Train
@@ -35,11 +37,14 @@ then
 else
     echo "Single-GPU mode received..."
     CUDA_VISIBLE_DEVICES=${devices} \
-    python src/train.py --ckpt_dir ckpt/${experiment_name} \
+    python src/train.py --experiment_name ${experiment_name} \
+                        --ckpt_dir ckpt/${experiment_name} \
                         --epochs ${epochs} \
                         --trainset ${trainset} \
                         --testsets ${testsets} \
-                        --dist ${to_be_distributed}
+                        --dist ${to_be_distributed} \
+                        --resume ${pretrained_checkpoint} \
+                        --epochs 300
 fi
 
 echo Training finished at $(date)
