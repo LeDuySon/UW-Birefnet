@@ -4,6 +4,8 @@
 experiment_name="$1" # experiment name
 pretrained_checkpoint=${2:-""} # pretrained checkpoint
 
+echo "Experiment name: ${experiment_name}"
+
 task=$(python3 src/config.py)
 case "${task}" in
     "DIS5K") epochs=600 && val_last=100 && step=5 ;;
@@ -43,8 +45,8 @@ else
                         --trainset ${trainset} \
                         --testsets ${testsets} \
                         --dist ${to_be_distributed} \
-                        --resume ${pretrained_checkpoint} \
-                        --epochs 300
+                        --resume ${pretrained_checkpoint}
+
 fi
 
 echo Training finished at $(date)

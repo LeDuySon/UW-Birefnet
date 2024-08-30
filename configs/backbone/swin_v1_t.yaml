@@ -1,0 +1,2 @@
+bb: "swin_v1_t"
+lateral_channels_in_collection: [768, 384, 192, 96]

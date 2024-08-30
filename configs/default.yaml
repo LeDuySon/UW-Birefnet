@@ -1,0 +1,52 @@
+# default.yaml
+defaults:
+  - paths: default.yaml
+  - backbone: vgg16
+  - experiment: null
+
+config:
+  _target_: src.config.Configv2
+  current_workdir: ${paths.current_workdir}
+
+  task: "car-segmentation" # ["DIS5K", "COD", "HRSOD", "DIS5K+HRSOD+HRS10K", "P3M-10k", "car-segmentation"]
+  training_set: null
+  prompt4loc: "dense" # ["dense", "sparse"]
+
+  # Faster-Training settings
+  load_all: true
+  compile: true
+  precisionHigh: true
+
+  # Model settings
+  ms_supervision: true
+  out_ref: ${config.ms_supervision}
+  dec_ipt: true
+  dec_ipt_split: true
+  cxt_num: 3 # [0, 3]
+  mul_scl_ipt: "cat" # ["", add", "cat"]
+  dec_att: "ASPPDeformable" # ["", "ASPP", "ASPPDeformable"]
+  squeeze_block: "BasicDecBlk_x1" # ["", "BasicDecBlk_x1", "ResBlk_x4", "ASPP_x3", "ASPPDeformable_x3"]
+  dec_blk: "BasicDecBlk" # ["BasicDecBlk", "ResBlk", "HierarAttDecBlk"]
+
+  # Training settings
+  batch_size: 2
+  IoU_finetune_last_epochs: -20 # 0 to skip
+  size: 1024
+  augmentation_path: "/home/ec2-user/workspace/bg-20k"
+
+  # Backbone settings
+  bb: ${backbone.bb}
+  lateral_channels_in_collection: ${backbone.lateral_channels_in_collection}
+
+  # Path settings
+  data_root_dir: ${paths.data_root_dir}
+  weights_root_dir: ${paths.weights_root_dir}
+
+args:
+  resume: null
+  experiment_name: "BiRefNet"
+  epochs: 120
+  trainset: null
+  testsets: null
+  dist: false
+  ckpt_dir: null

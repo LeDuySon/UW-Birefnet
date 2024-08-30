@@ -1,0 +1,19 @@
+defaults:
+  - default.yaml
+  - _self_
+
+backbone:
+  _file_: swin_v1_b.yaml
+
+config:
+  training_set: "train_13052024_v2"
+  augmentation: true
+
+args:
+  experiment_name: "test_augmentation"
+  ckpt_dir: ckpt/${args.experiment_name}
+  epochs: 120
+  trainset: "train_13052024_v2"
+  testsets: "test_01042024"
+  dist: false
+  resume: checkpoints/BiRefNet-massive-epoch_240.pth

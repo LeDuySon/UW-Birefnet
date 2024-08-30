@@ -1,0 +1,2 @@
+bb: resnet50
+lateral_channels_in_collection: [1024, 512, 256, 128]

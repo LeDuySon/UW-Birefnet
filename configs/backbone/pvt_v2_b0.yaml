@@ -1,0 +1,2 @@
+bb: pvt_v2_b0
+lateral_channels_in_collection: [256, 160, 64, 32]

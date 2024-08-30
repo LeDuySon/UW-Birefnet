@@ -62,3 +62,5 @@ for checkpoint in "${checkpoints_file[@]}"; do
         bash scripts/inference_images.sh ${dataset} ${checkpoint} ${savedir}
     fi
 done
+
+echo "Run fiftyone comparison"

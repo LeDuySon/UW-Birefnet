@@ -1,0 +1,3 @@
+current_workdir: ${hydra:runtime.cwd}
+data_root_dir: ${paths.current_workdir}/datasets
+weights_root_dir: ${paths.current_workdir}/checkpoints/backbone

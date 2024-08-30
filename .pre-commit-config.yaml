@@ -15,6 +15,6 @@ repos:
         exclude: ^(pre_commit/resources/|testing/resources/python3_hooks_repo/)
         args: [--py39-plus, --add-import, 'from __future__ import annotations']
 -   repo: https://github.com/psf/black
-    rev: 22.10.0
+    rev: 24.8.0
     hooks:
     -   id: black
