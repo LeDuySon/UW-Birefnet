@@ -259,7 +259,9 @@ class CarSegmentationData(data.Dataset):
             self.label_paths += self.get_paths(label_root)
 
         carvana_augmentation = (
-            config.carvana_augmentation if hasattr(config, "carvana_augmentation") else None
+            config.carvana_augmentation
+            if hasattr(config, "carvana_augmentation")
+            else None
         )
         print(f"Carvana augmentation path: {carvana_augmentation}")
 
@@ -273,7 +275,6 @@ class CarSegmentationData(data.Dataset):
             carvana_masks = self.get_paths(carvana_augmentation + "/train_masks")
             self.image_paths.extend(carvana_images)
             self.label_paths.extend(carvana_masks)
-
 
         if self.load_all:
             self.images_loaded, self.labels_loaded = [], []
@@ -375,7 +376,7 @@ class CarSegmentationData(data.Dataset):
 
         return augmented_image, label
 
-    def get_paths(self, data_path: str, exts = (".png", ".jpg", ".PNG", ".JPG", ".JPEG")):
+    def get_paths(self, data_path: str, exts=(".png", ".jpg", ".PNG", ".JPG", ".JPEG")):
         # get image paths recursively
         paths = []
         for root, _, files in os.walk(data_path):

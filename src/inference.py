@@ -82,9 +82,7 @@ def main(args):
     for testset in args.testsets.split("+"):
         print(">>>> Testset: {}...".format(testset))
         data_loader_test = torch.utils.data.DataLoader(
-            dataset=CarSegmentationData(
-                testset, config=config, is_train=False
-            ),
+            dataset=CarSegmentationData(testset, config=config, is_train=False),
             batch_size=config.batch_size_valid,
             shuffle=False,
             num_workers=config.num_workers,
