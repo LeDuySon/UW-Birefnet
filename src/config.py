@@ -292,7 +292,6 @@ class Configv2:
             self.batch_size = 2 ** [0, 1, 2, 3, 4][2]
 
         # TRAINING settings - inactive
-        self.preproc_methods = ["flip", "enhance", "rotate", "pepper", "crop"][:4]
         self.optimizer = ["Adam", "AdamW"][1]
         self.lr_decay_epochs = [
             1e5
@@ -394,7 +393,7 @@ class Configv2:
     version_base="1.3", config_path="../configs", config_name="augmentation.yaml"
 )
 def main(cfg: DictConfig):
-    # print(cfg)
+    print(cfg)
     config = hydra.utils.instantiate(cfg.get("config"))
     print(config.task)
     # print(config)

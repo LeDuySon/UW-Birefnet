@@ -83,7 +83,7 @@ def main(args):
         print(">>>> Testset: {}...".format(testset))
         data_loader_test = torch.utils.data.DataLoader(
             dataset=CarSegmentationData(
-                testset, image_size=config.size, is_train=False
+                testset, config=config, is_train=False
             ),
             batch_size=config.batch_size_valid,
             shuffle=False,

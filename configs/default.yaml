@@ -29,9 +29,10 @@ config:
   dec_blk: "BasicDecBlk" # ["BasicDecBlk", "ResBlk", "HierarAttDecBlk"]
 
   # Training settings
-  batch_size: 2
+  batch_size: 4
   IoU_finetune_last_epochs: -20 # 0 to skip
   size: 1024
+  preproc_methods: ["flip", "enhance", "rotate", "pepper", "crop"]
   augmentation_path: "/home/ec2-user/workspace/bg-20k"
 
   # Backbone settings

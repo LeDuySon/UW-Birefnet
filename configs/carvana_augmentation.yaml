@@ -8,9 +8,11 @@ backbone:
 config:
   training_set: "train_13052024_v2"
   augmentation: true
+  carvana_augmentation: "/data/carvana-dataset"
+  load_all: false # avoid out of memory
 
 args:
-  experiment_name: "bg_augmentation_31_08_v2"
+  experiment_name: "carvana_augmentation"
   ckpt_dir: ckpt/${args.experiment_name}
   epochs: 120
   trainset: "train_13052024_v2+train_09072024+train_01042024"

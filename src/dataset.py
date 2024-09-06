@@ -258,10 +258,22 @@ class CarSegmentationData(data.Dataset):
             label_root = os.path.join(dataset_root, dataset, "gt", "masks")
             self.label_paths += self.get_paths(label_root)
 
+        carvana_augmentation = (
+            config.carvana_augmentation if hasattr(config, "carvana_augmentation") else None
+        )
+        print(f"Carvana augmentation path: {carvana_augmentation}")
+
         # sorted image and label paths
         self.image_paths = sorted(self.image_paths, key=lambda x: os.path.basename(x))
         self.label_paths = sorted(self.label_paths, key=lambda x: os.path.basename(x))
         self.validate_data_pair(self.image_paths, self.label_paths)
+
+        if is_train and carvana_augmentation is not None:
+            carvana_images = self.get_paths(carvana_augmentation + "/train")
+            carvana_masks = self.get_paths(carvana_augmentation + "/train_masks")
+            self.image_paths.extend(carvana_images)
+            self.label_paths.extend(carvana_masks)
+
 
         if self.load_all:
             self.images_loaded, self.labels_loaded = [], []
@@ -284,10 +296,13 @@ class CarSegmentationData(data.Dataset):
                     else -1
                 )
 
-        self.background_paths = self.get_paths(config.augmentation_path + "/testval")
-        self.background_paths.extend(
-            self.get_paths(config.augmentation_path + "/train")
-        )
+        if is_train:
+            self.background_paths = self.get_paths(
+                config.augmentation_path + "/testval"
+            )
+            self.background_paths.extend(
+                self.get_paths(config.augmentation_path + "/train")
+            )
 
     #     if config.augmentation_path is not None and is_train:
     #         subfolder = "/train" if self.is_train else "/test"
@@ -360,12 +375,12 @@ class CarSegmentationData(data.Dataset):
 
         return augmented_image, label
 
-    def get_paths(self, data_path: str):
+    def get_paths(self, data_path: str, exts = (".png", ".jpg", ".PNG", ".JPG", ".JPEG")):
         # get image paths recursively
         paths = []
         for root, _, files in os.walk(data_path):
             for file in files:
-                if file.endswith((".png", ".jpg", ".PNG", ".JPG", ".JPEG")):
+                if file.endswith(exts):
                     paths.append(os.path.join(root, file))
         return paths
 
@@ -403,7 +418,7 @@ class CarSegmentationData(data.Dataset):
 
         # loading image and label
         if self.is_train:
-
+            image, label = self._background_augmentation(image, label)
             image, label = preproc(image, label, preproc_methods=self.preproc_methods)
 
         image, label = self.transform_image(image), self.transform_label(label)
@@ -414,11 +429,13 @@ class CarSegmentationData(data.Dataset):
             return image, label, self.label_paths[index]
 
     def __len__(self):
-        return len(self.images_loaded)
+        return len(self.image_paths)
 
 
 @hydra.main(
-    version_base="1.3", config_path="../configs", config_name="augmentation.yaml"
+    version_base="1.3",
+    config_path="../configs",
+    config_name="carvana_augmentation.yaml",
 )
 def main(cfg: DictConfig):
     config = hydra.utils.instantiate(cfg.get("config"))
